@@ -3,62 +3,41 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import { useState } from 'react'
 import classnames from 'classnames';
+import dayjs from 'dayjs';
+import { client } from '../.tina/__generated__/client'
+import { useTina } from 'tinacms/dist/react'
+import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-const inter = Inter({ subsets: ['latin'] })
+export async function getServerSideProps() {
+  const reviveConnection = await client.queries.projectConnection();
+  const projects = reviveConnection?.data?.projectConnection?.edges?.map((x) => ({
+    ...x?.node
+  }));
 
-export default function Home() {
+  const page = await client.queries.page({ relativePath: 'homepage.md' })
+
+  const reviveBlogConntection = await client.queries.blogConnection();
+  const blogs = reviveBlogConntection?.data?.blogConnection?.edges?.map((z) => ({ ...z?.node }))
+
+  return {
+    props: {
+      projects,
+      blogs,
+      page,
+    }
+  }
+}
+
+interface Props {
+  projects: any[]
+  blogs: any[]
+  page: any
+}
+
+export default function Home(props: Props) {
+  const { projects, blogs } = props;
   const [currentTab, setCurrentTab] = useState(0);
-
-  const projects = [
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'beautymates'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'Indonesia Best Brand Award'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'Lumbungin'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'Sinar Despo'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'Cilegon Port'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'Hoya Ordering Lensa'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'ClubOpenRoad Loyalty Program'
-    },
-    {
-      client: 'Kota Digivice',
-      role: 'Frontend Developer',
-      working_time: 'June 2022',
-      project_title: 'Kebuli Al-Khalid'
-    },
-  ]
+  const pageView = useTina<any>(props.page);
 
   const tabs = ['Projects', 'Blog']
 
@@ -74,17 +53,16 @@ export default function Home() {
         <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl w-full md:px-0 px-8">
           <div className="xl:py-32 lg:py-24 md:py-12 py-16">
             <div>
-              <h4 className="text-white text-5xl font-bold leading-snug">
-                Hello, i am <br /> Dian Handiyansah
+              <h4 className="text-white text-5xl font-bold leading-snug" dangerouslySetInnerHTML={{ __html: pageView?.data?.page?.short_text || '' }}>
               </h4>
 
-              <p className="mt-4 max-w-sm text-vanila font-medium text-base">
-                3 years experience in react JS developer, currently working as Frontend Developer at <a href="https://kotadigivice.com/" target="_blank"><span className="text-white">Kota Digivice</span></a>. in the future I want to make an IoT (Internet Of Things) product.
-              </p>
+              <div className="mt-4 max-w-sm text-vanila font-medium text-base prose prose-a:text-white">
+                <TinaMarkdown content={pageView?.data?.page?.long_text} />
+              </div>
             </div>
 
             <ul className="inline-flex items-center space-x-3 mt-8">
-              <a href="/">
+              <a href={pageView?.data?.page?.facebook_url} target="_blank">
                 <li className="inline-flex items-center space-x-2 text-white text-base">
                   <span>Facebook</span>
 
@@ -94,7 +72,7 @@ export default function Home() {
                 </li>
               </a>
 
-              <a href="/">
+              <a href={pageView?.data?.page?.github_url} target="_blank">
                 <li className="inline-flex items-center space-x-2 text-white text-base">
                   <span>Github</span>
 
@@ -143,15 +121,15 @@ export default function Home() {
                       <div>
                         <h6 className="text-xs uppercase text-white tracking-widest">{_item.client}</h6>
                         <h6 className="text-xs text-vanila">{_item.role}</h6>
-                        <h6 className="text-xs text-vanila">{_item.working_time}</h6>
+                        <h6 className="text-xs text-vanila">{dayjs(_item.time_start).format('MMM YYYY')} - {dayjs(_item.time_end).format('MMM YYYY')}</h6>
                       </div>
 
                       <div className="mt-8">
-                        <h3 className="text-3xl text-white font-sans">{_item.project_title}</h3>
+                        <h3 className="text-3xl text-white font-sans">{_item.title}</h3>
 
 
                         <ul className="mt-2">
-                          <a href="">
+                          <a href={`/project/${_item?._sys?.filename}`}>
                             <li className="inline-flex items-center space-x-1">
                               <span className="text-xs text-white">Overview</span>
 
@@ -181,31 +159,35 @@ export default function Home() {
             {currentTab === 1 && (
               <div className="xl:w-8/12 lg:w-8/12 md:w-full w-full pt-8">
                 <div className="flex flex-col space-y-6">
-                  <div className="flex flex-col justify-between min-h-min w-full h-full bg-secondary/80 hover:bg-secondary px-6 py-6 hover:scale-125 transition-transform duration-300">
-                    <ul>
-                      <li className="text-xs text-white tracking-widest uppercase"><span>June 2022</span></li>
-                    </ul>
-
-                    <div className="mt-4">
-                      <h3 className="text-2xl text-white font-sans">Build mobile app use React Native</h3>
-
-                      <p className="max-w-sm text-vanila font-medium text-base">
-                        we currently experiment to build app with react native
-                      </p>
-                    </div>
-
-                    <ul className="mt-2">
-                      <a href="/">
-                        <li className="inline-flex items-center space-x-1">
-                          <span className="text-xs text-white">Owl Media Indonesia</span>
-
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-white">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                          </svg>
+                  {blogs.map((_item, key) => (
+                    <div className="flex flex-col justify-between min-h-min w-full h-full bg-secondary/80 hover:bg-secondary px-6 py-6 hover:scale-125 transition-transform duration-300" key={key}>
+                      <ul>
+                        <li className="text-xs text-white tracking-widest uppercase">
+                          <span>{dayjs(_item.published).format('DD MMM YYYY')}</span>
                         </li>
-                      </a>
-                    </ul>
-                  </div>
+                      </ul>
+
+                      <div className="mt-4">
+                        <h3 className="text-2xl text-white font-sans">{_item.title}</h3>
+
+                        <p className="max-w-sm text-vanila font-medium text-base">
+                          {_item.description}
+                        </p>
+                      </div>
+
+                      <ul className="mt-2">
+                        <a href={_item.provider_url} target="_blank">
+                          <li className="inline-flex items-center space-x-1">
+                            <span className="text-xs text-white">{_item.provider_name}</span>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-white">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            </svg>
+                          </li>
+                        </a>
+                      </ul>
+                    </div>
+                  ))}
                 </div>
 
                 {/* <div className="flex items-center justify-center mt-8">
