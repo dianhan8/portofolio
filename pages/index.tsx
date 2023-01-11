@@ -62,7 +62,7 @@ export default function Home(props: Props) {
             </div>
 
             <ul className="inline-flex items-center space-x-3 mt-8">
-              <a href={pageView?.data?.page?.facebook_url} target="_blank">
+              <a href={pageView?.data?.page?.facebook_url} target="_blank" rel="noreferrer">
                 <li className="inline-flex items-center space-x-2 text-white text-base">
                   <span>Facebook</span>
 
@@ -72,7 +72,7 @@ export default function Home(props: Props) {
                 </li>
               </a>
 
-              <a href={pageView?.data?.page?.github_url} target="_blank">
+              <a href={pageView?.data?.page?.github_url} target="_blank" rel="noreferrer">
                 <li className="inline-flex items-center space-x-2 text-white text-base">
                   <span>Github</span>
 
@@ -129,7 +129,7 @@ export default function Home(props: Props) {
 
 
                         <ul className="mt-2">
-                          <a href={`/project/${_item?._sys?.filename}`}>
+                          <a href={`/project/${_item?._sys?.filename}`} rel="noreferrer">
                             <li className="inline-flex items-center space-x-1">
                               <span className="text-xs text-white">Overview</span>
 
@@ -176,7 +176,7 @@ export default function Home(props: Props) {
                       </div>
 
                       <ul className="mt-2">
-                        <a href={_item.provider_url} target="_blank">
+                        <a href={_item.provider_url} target="_blank" rel="noreferrer">
                           <li className="inline-flex items-center space-x-1">
                             <span className="text-xs text-white">{_item.provider_name}</span>
 

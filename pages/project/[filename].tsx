@@ -8,6 +8,7 @@ import { client } from '../../.tina/__generated__/client'
 import { useTina } from 'tinacms/dist/react'
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
 
 export const getServerSideProps: GetServerSideProps<{ projectView: any }> = async (context: GetServerSidePropsContext) => {
     const projectView = await client.queries.project({ relativePath: `${context?.params?.filename}.md` });
@@ -72,13 +73,13 @@ function Project(props: Props) {
                         </div>
 
                         <div>
-                            <a href="/" className="px-4 py-4 bg-secondary text-vanila inline-flex items-center space-x-2">
+                            <Link href="/" className="px-4 py-4 bg-secondary text-vanila inline-flex items-center space-x-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                 </svg>
 
                                 <span>Back to home</span>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

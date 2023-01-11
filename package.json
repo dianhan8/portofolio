@@ -6,6 +6,7 @@
     "dev": "tinacms dev -c \"next dev -p 4084\"",
     "build": "tinacms build && next build",
     "start": "tinacms build && next start",
+    "start:prod": "next start",
     "lint": "next lint"
   },
   "dependencies": {
