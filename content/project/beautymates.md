@@ -1,7 +1,7 @@
 ---
 title: beautymates
-time_start: '2020-01-09T17:00:00.000Z'
-time_end: '2023-01-09T17:00:00.000Z'
+time_start: '2019-12-31T17:00:00.000Z'
+time_end: '2020-11-30T17:00:00.000Z'
 client: Kota Digivice
 role: Frontend Developer
 ---
