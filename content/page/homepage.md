@@ -1,7 +1,7 @@
 ---
 page_title: homepage
 short_text: 'Hello, i am <br /> Dian Handiyansah'
-facebook_url: 'https://facebook.com'
+facebook_url: 'https://www.facebook.com/dian.handiyansah'
 github_url: 'https://github.com/dianhan8'
 ---
 
