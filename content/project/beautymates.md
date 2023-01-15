@@ -8,4 +8,14 @@ role: Frontend Developer
 
 ### Introduction
 
-PT Bank Tabungan Negara (BTN) wants to build a marketplace for procuring tools or services in government offices, but the payments are automatically integrated directly into the bank using a virtual bank. The name for this project is called “Closeloop BTN“ and the name product is digipay200. Digipay is a solution for transactions between the government and the UMKM.
+Situs belanja kecantikan online yang menawarkan produk lokal maupun produk asli asal korea.
+
+### Challenge
+
+Proyek beautymates memiliki 4 bagian kerja, meliputi pembuatan **API**, **Portal Customer**, **Portal Admin**, dan **Portal Seller**. Dari proyek beautymates saya bertugas untuk membuat portal customer, dan portal admin.
+
+Kedua portal tersebut memiliki **Design** yang berbeda.
+
+### Solution
+
+Dalam pengerjaan proyek beautymates, saya menggunakan framework yang bisa mempercepat pengerjaan kedua portal tersebut.

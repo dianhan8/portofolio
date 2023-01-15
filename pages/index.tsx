@@ -9,14 +9,14 @@ import { useTina } from 'tinacms/dist/react'
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 export async function getServerSideProps() {
-  const reviveConnection = await client.queries.projectConnection();
+  const reviveConnection = await client.queries.projectConnection({ sort: 'time_end' });
   const projects = reviveConnection?.data?.projectConnection?.edges?.map((x) => ({
     ...x?.node
   }));
 
   const page = await client.queries.page({ relativePath: 'homepage.md' })
 
-  const reviveBlogConntection = await client.queries.blogConnection();
+  const reviveBlogConntection = await client.queries.blogConnection({ sort: 'published' });
   const blogs = reviveBlogConntection?.data?.blogConnection?.edges?.map((z) => ({ ...z?.node }))
 
   return {

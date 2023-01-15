@@ -6,4 +6,6 @@ client: Kota Digivice
 role: Frontend Developer
 ---
 
-Introduction
+### Introduction
+
+Lumbungin adalah platform digital berbasis aplikasi mobile dengan berbagai fitur edukasi, jaringan komunitas, dan peluang usaha pertanian untuk memenuhi kebutuhan Kementerian Pertanian Republik Indonesia
