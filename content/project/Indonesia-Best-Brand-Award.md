@@ -19,4 +19,5 @@ Pada proyek IBBA saya bertugas untuk melakukan perbaikan di beberapa fitur. IBBA
 
 Saya bertugas untuk memperbaiki UI sesuai dengan Design yang telah ditentukan, dan menintegrasikan fitur payment yang ada di portal website tersebut.
 
-### Solusion
+### Solution
+
