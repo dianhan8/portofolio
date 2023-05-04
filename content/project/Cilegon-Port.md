@@ -8,4 +8,4 @@ role: Frontend Developer
 
 ### Introduction
 
-Sebuat situs website profile perusahaan dibidang pelabuhan.
+Sebuah situs website profile perusahaan dibidang pelabuhan.
