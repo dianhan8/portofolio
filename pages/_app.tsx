@@ -1,15 +1,21 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { Inter } from '@next/font/google'
+import { Roboto_Mono } from '@next/font/google'
+import FontLocal from '@next/font/local'
 
-const inter = Inter({
+const robotoMono = Roboto_Mono({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-roboto-mono',
 })
+
+const protoMono = FontLocal({
+  src: '../styles/fonts/Proto.Mono/Proto_Mono_Regular.ttf',
+  variable: '--font-proto-mono',
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={`${inter.variable} font-sans bg-black`}>
+    <main className={`${robotoMono.variable} ${protoMono.variable} font-sans bg-[#101015]`}>
       <Component {...pageProps} />
     </main>
   )

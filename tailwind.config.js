@@ -14,7 +14,8 @@ module.exports = {
         vanila: '#7f7f7f',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', ...fontFamily.sans],
+        sans: ['var(--font-roboto-mono)'],
+        'proto-mono': ['var(--font-proto-mono)'],
       },
     },
   },

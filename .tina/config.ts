@@ -47,16 +47,6 @@ export default defineConfig({
             required: true,
           },
           {
-            type: 'string',
-            name: 'facebook_url',
-            label: 'Facebook URL'
-          },
-          {
-            type: 'string',
-            name: 'github_url',
-            label: 'Github URL'
-          },
-          {
             isBody: true,
             type: "rich-text",
             name: 'long_text',
@@ -64,15 +54,32 @@ export default defineConfig({
             required: true,
             templates: [
               {
-                name: "Callout",
-                label: "Callout",
-                fields: [{
-                  name: "message",
-                  label: "Message",
-                  type: "string"
-                }
-              ]}
+                name: "SocialMediaButton",
+                label: "Social Media Button",
+                fields: [
+                  {
+                    name: "button_label",
+                    label: "Button Label",
+                    type: "string"
+                  },
+                  {
+                    name: "button_href",
+                    label: "Button Link",
+                    type: "string"
+                  },
+                  {
+                    name: "button_external",
+                    label: "Is External Link?",
+                    type: "boolean"
+                  },
+                ]
+              }
             ]
+          },
+          {
+            type: 'string',
+            name: 'seo_description',
+            label: 'SEO Description',
           }
         ]
       },
@@ -89,12 +96,22 @@ export default defineConfig({
             required: true,
           },
           {
-            type: 'datetime',
-            name: 'time_start',
-            label: 'Date Start',
-            ui: {
-              dateFormat: 'MM YYYY'
-            }
+            type: 'string',
+            name: 'description',
+            label: 'Project Description',
+            required: true,
+          },
+          {
+            type: 'string',
+            name: 'code_language',
+            label: 'Code Language',
+            required: true,
+          },
+          {
+            type: 'string',
+            name: 'platform',
+            label: 'Platform',
+            list: true,
           },
           {
             type: 'datetime',
@@ -111,27 +128,11 @@ export default defineConfig({
             required: true,
           },
           {
-            type: 'string',
-            name: 'role',
-            label: 'Role',
-            required: true,
-          },
-          {
             isBody: true,
             type: "rich-text",
             name: 'long_text',
             label: 'Story',
-            templates: [
-              {
-                name: "Callout",
-                label: "Callout",
-                fields: [{
-                  name: "message",
-                  label: "Message",
-                  type: "string"
-                }
-              ]}
-            ]
+            templates: []
           }
         ],
         ui: {

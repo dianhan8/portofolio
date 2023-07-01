@@ -1,15 +1,12 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import { useState } from 'react'
-import classnames from 'classnames';
+import Link from 'next/link'
 import dayjs from 'dayjs';
 import { client } from '../.tina/__generated__/client'
 import { useTina } from 'tinacms/dist/react'
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 export async function getServerSideProps() {
-  const reviveConnection = await client.queries.projectConnection({ sort: 'time_end' });
+  const reviveConnection = await client.queries.projectConnection();
   const projects = reviveConnection?.data?.projectConnection?.edges?.map((x) => ({
     ...x?.node
   }));
@@ -34,12 +31,27 @@ interface Props {
   page: any
 }
 
+const SocialMediaButton = (props: any) => {
+  const { button_label, button_href, button_external } = props;
+
+  return (
+    <a
+      href={button_href}
+      target={button_external ? "_blank" : ""}
+      className="inline-flex items-center justify-center bg-[#F0F1E1] text-base text-[#1F1F21] font-proto-mono px-4 py-2 mr-2"
+    >
+      {button_label}
+
+      <span className="material-symbols-outlined ml-2">
+        open_in_new
+      </span>
+    </a>
+  )
+}
+
 export default function Home(props: Props) {
   const { projects, blogs } = props;
-  const [currentTab, setCurrentTab] = useState(0);
   const pageView = useTina<any>(props.page);
-
-  const tabs = ['Projects', 'Blog']
 
   return (
     <>
@@ -49,161 +61,90 @@ export default function Home(props: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main className="min-h-screen">
         <div className="mx-auto xl:max-w-6xl lg:max-w-4xl md:max-w-2xl w-full md:px-0 px-8">
           <div className="xl:py-32 lg:py-24 md:py-12 py-16">
             <div>
-              <h4 className="text-white text-5xl font-bold leading-snug" dangerouslySetInnerHTML={{ __html: pageView?.data?.page?.short_text || '' }}>
-              </h4>
+              <div>
+                <h4
+                  className="text-[#F0F1E1] text-5xl font-bold leading-snug font-proto-mono"
+                  dangerouslySetInnerHTML={{ __html: pageView?.data?.page?.short_text || '' }}
+                />
 
-              <div className="mt-4 max-w-sm text-vanila font-medium text-base prose prose-a:text-white">
-                <TinaMarkdown content={pageView?.data?.page?.long_text} />
+                <div className="mt-4 max-w-sm text-[#F0F1E1] font-medium text-base prose prose-a:no-underline font-sans">
+                  <TinaMarkdown
+                    components={{
+                      SocialMediaButton,
+                    }}
+                    content={pageView?.data?.page?.long_text}
+                  />
+                </div>
               </div>
             </div>
 
-            <ul className="inline-flex items-center space-x-3 mt-8">
-              <a href={pageView?.data?.page?.facebook_url} target="_blank" rel="noreferrer">
-                <li className="inline-flex items-center space-x-2 text-white text-base">
-                  <span>Facebook</span>
+            <div className="mt-6 px-6 py-6 bg-[#1F1F21]">
+              <h3 className="text-base font-proto-mono text-[#F0F1E1]">All Projects</h3>
+            </div>
 
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>
-                </li>
-              </a>
-
-              <a href={pageView?.data?.page?.github_url} target="_blank" rel="noreferrer">
-                <li className="inline-flex items-center space-x-2 text-white text-base">
-                  <span>Github</span>
-
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>
-                </li>
-              </a>
-            </ul>
-          </div>
-
-          <div className="pb-12">
-            <ul className="inline-flex items-center space-x-5">
-              {tabs.map((_item, key) => {
-                const liClassname = classnames('text-base font-medium tracking-widest uppercase group', {
-                  'text-white': key === currentTab,
-                  'text-vanila': key !== currentTab,
-                });
-
-                const lineClassnames = classnames('w-[60%] h-[3px] mt-1 group-hover:w-full transition-all duration-200', {
-                  'bg-white': key === currentTab,
-                  'bg-vanila': key !== currentTab,
-                });
-
-                return (
-                  <li
-                    className={liClassname}
-                    role="button"
-                    onClick={() => setCurrentTab(key)}
+            <div className="mt-6 grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+              {projects.map((_item, key) => (
+                <Link href={`/project/${_item._sys.filename}`}>
+                  <div
+                    className="flex flex-col justify-between min-h-[305px] w-full h-full bg-[#1F1F21] p-6"
                     key={key}
                   >
-                    <span>{_item}</span>
-
-                    <div className={lineClassnames}></div>
-                  </li>
-                )
-              })}
-            </ul>
-
-
-            {currentTab === 0 && (
-              <>
-                <div className="mt-8 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
-                  {projects.map((_item, key) => (
-                    <div className="flex flex-col justify-between min-h-min w-full h-full bg-secondary/80 hover:bg-secondary px-6 py-6 hover:scale-125 transition-transform duration-300" key={key}>
-                      <div>
-                        <h6 className="text-xs uppercase text-white tracking-widest">{_item.client}</h6>
-                        <h6 className="text-xs text-vanila">{_item.role}</h6>
-                        <h6 className="text-xs text-vanila">{dayjs(_item.time_start).format('MMM YYYY')} - {dayjs(_item.time_end).format('MMM YYYY')}</h6>
+                    <div className="flex items-start justify-between">
+                      <div className="max-w-[70%]">
+                        <h3 className="text-xl text-[#F0F1E1] font-proto-mono">{_item.title}</h3>
                       </div>
 
-                      <div className="mt-8">
-                        <h3 className="text-3xl text-white font-sans">{_item.title}</h3>
-
-
-                        <ul className="mt-2">
-                          <a href={`/project/${_item?._sys?.filename}`} rel="noreferrer">
-                            <li className="inline-flex items-center space-x-1">
-                              <span className="text-xs text-white">Overview</span>
-
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-white">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                              </svg>
-                            </li>
-                          </a>
-                        </ul>
+                      <div className="bg-[#F0F1E1] rounded-full w-6 h-6 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                          <g id="arrow-up-right">
+                            <path id="Vector" d="M5.25 12.75L12.75 5.25" stroke="#1F1F21" strokeWidth="2" stroke-linecap="round" strokeLinejoin="round" />
+                            <path id="Vector_2" d="M5.25 5.25H12.75V12.75" stroke="#1F1F21" strokeWidth="2" stroke-linecap="round" strokeLinejoin="round" />
+                          </g>
+                        </svg>
                       </div>
                     </div>
-                  ))}
-                </div>
 
-                {/* <div className="flex items-center justify-center mt-8">
-                  <button className="inline-flex items-center space-x-2 text-vanila bg-secondary px-4 py-2 hover:text-white transition-all duration-300 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 group-hover:translate-y-1 transition-all duration-300">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                    </svg>
+                    <div>
+                      <div>
+                        <ul className="space-x-2 mb-1">
+                          {_item.platform?.map((x: string, key: number) => (
+                            <li
+                              key={key}
+                              className="text-sm text-[#101015] font-proto-mono inline px-1 bg-[#F0F1E1]"
+                            >
+                              {x}
+                            </li>
+                          ))}
+                        </ul>
 
-                    <span>Load more</span>
-                  </button>
-                </div> */}
-              </>
-            )}
-
-            {currentTab === 1 && (
-              <div className="xl:w-8/12 lg:w-8/12 md:w-full w-full pt-8">
-                <div className="flex flex-col space-y-6">
-                  {blogs.map((_item, key) => (
-                    <div className="flex flex-col justify-between min-h-min w-full h-full bg-secondary/80 hover:bg-secondary px-6 py-6 hover:scale-125 transition-transform duration-300" key={key}>
-                      <ul>
-                        <li className="text-xs text-white tracking-widest uppercase">
-                          <span>{dayjs(_item.published).format('DD MMM YYYY')}</span>
-                        </li>
-                      </ul>
-
-                      <div className="mt-4">
-                        <h3 className="text-2xl text-white font-sans">{_item.title}</h3>
-
-                        <p className="max-w-sm text-vanila font-medium text-base">
+                        <p className="text-sm text-[#F0F1E1] font-proto-mono max-w-[70%]">
                           {_item.description}
                         </p>
                       </div>
 
-                      <ul className="mt-2">
-                        <a href={_item.provider_url} target="_blank" rel="noreferrer">
-                          <li className="inline-flex items-center space-x-1">
-                            <span className="text-xs text-white">{_item.provider_name}</span>
+                      <hr className="bg-[#AEADA4] my-2" />
 
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-white">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                            </svg>
-                          </li>
-                        </a>
-                      </ul>
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-proto-mono text-[#F0F1E1]">
+                          {_item.code_language}
+                        </h4>
+                        <h4 className="text-sm font-proto-mono text-[#F0F1E1]">
+                          {dayjs(_item.time_end).format('MMMM YYYY')}
+                        </h4>
+                      </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* <div className="flex items-center justify-center mt-8">
-                  <button className="inline-flex items-center space-x-2 text-vanila bg-secondary px-4 py-2 hover:text-white transition-all duration-300 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 group-hover:translate-y-1 transition-all duration-300">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                    </svg>
-
-                    <span>Load more</span>
-                  </button>
-                </div> */}
-              </div>
-            )}
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-      </main>
+      </main >
     </>
   )
 }
