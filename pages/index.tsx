@@ -39,6 +39,7 @@ const SocialMediaButton = (props: any) => {
       href={button_href}
       target={button_external ? "_blank" : ""}
       className="inline-flex items-center justify-center bg-[#F0F1E1] text-base text-[#1F1F21] font-proto-mono px-4 py-2 mr-2"
+      rel="noreferrer"
     >
       {button_label}
 
@@ -89,7 +90,7 @@ export default function Home(props: Props) {
 
             <div className="mt-6 grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
               {projects.map((_item, key) => (
-                <Link href={`/project/${_item._sys.filename}`}>
+                <Link href={`/project/${_item._sys.filename}`} key={key}>
                   <div
                     className="flex flex-col justify-between min-h-[305px] w-full h-full bg-[#1F1F21] p-6"
                     key={key}
